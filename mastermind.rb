@@ -3,7 +3,7 @@ require 'pry'
 
 module Actions
 
-    def random_input(selection, colours)
+    def random_input(selection, colours) # this function will push 4 random colours into the @code_pegs array
         i = 0
         until i == 4
             random_colour = colours[rand(6)]
@@ -13,7 +13,10 @@ module Actions
         p selection
     end
 
-    def player_input
+    def player_input # this function asks for a player input and then records it in @player_selection
+
+        @player_selection = [] # resets player_selection for new input
+        @counter = 0 # resets counter for new player input
 
         def colour_check(colour)
             if @colours.include? colour
@@ -41,18 +44,42 @@ module Actions
                 puts "What colour is the fourth peg?"
                 selected_colour = gets.chomp
                 colour_check(selected_colour)
-            else check_answers(@code_pegs, @player_selection)
             end
         end
 
     end
         
-    def check_answers(answer, player_answers)
-    end
+    def check_answers
 
-    def play_turn(answer, input)
-    end
+        result = []
 
+        temp_answer = @code_pegs.clone
+        temp_player = @player_selection.clone
+
+        peg_position = 0
+        until peg_position == 4
+            if temp_answer[peg_position] == temp_player[peg_position]
+                result.push('black')
+                temp_answer[peg_position] = "correct"
+                temp_player[peg_position] = "correct"
+            else result.push(' ')
+            end 
+        peg_position += 1
+        end
+
+        peg_position = 0 # resets so now it looks for out of place items
+        until peg_position == 4
+            if temp_answer[peg_position] == "correct"
+                peg_position +=1
+            elsif temp_answer.include? temp_player[peg_position]
+                result[peg_position] = "white"
+                peg_position += 1
+            else
+                peg_position += 1
+            end
+        end
+        result
+    end
 end
 
 class Game
@@ -66,12 +93,26 @@ class Game
         @player_selection = []
         @counter = 0
         @colours = ['red', 'blue', 'yellow', 'green', 'orange', 'purple']
+        @turns = 0 
+
         random_input(@code_pegs, @colours)
-        play_turn(@code_pegs, player_input)
+        
+        def play_game
+            until @turns == 12
+                player_input
+                result = check_answers
+                @turns += 1
+                p result
+                if result == ['black', 'black', 'black', 'black']
+                    p "You win!"
+                    @turns = 12
+                elsif @turns == 11
+                    p "You lose! Better luck next time!"
+                end
+            end
+        end
     end
-
-    @@turns = 0 # to code into, only 12 turns allowed
-
 end
 
 new_game = Game.new()
+new_game.play_game
