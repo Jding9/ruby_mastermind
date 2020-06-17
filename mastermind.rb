@@ -49,7 +49,7 @@ module Actions
 
     end
         
-    def check_answers
+    def check_answers # checks the answers of the player input against the computer
 
         result = []
 
@@ -94,21 +94,31 @@ class Game
         @counter = 0
         @colours = ['red', 'blue', 'yellow', 'green', 'orange', 'purple']
         @turns = 0 
-
-        random_input(@code_pegs, @colours)
-        
+     
         def play_game
-            until @turns == 12
-                player_input
-                result = check_answers
-                @turns += 1
-                p result
-                if result == ['black', 'black', 'black', 'black']
-                    p "You win!"
-                    @turns = 12
-                elsif @turns == 11
-                    p "You lose! Better luck next time!"
+            
+            puts "Who is guessing? Computer or Human?"
+            who_is_guessing = gets.chomp.downcase
+            if who_is_guessing == "computer"
+                @code_pegs = player_input
+                ## TO CODE INTO HERE THE COMPUTER AI
+            elsif who_is_guessing == "human"
+                random_input(@code_pegs, @colours)
+                until @turns == 12
+                    player_input
+                    result = check_answers
+                    @turns += 1
+                    p result
+                    if result == ['black', 'black', 'black', 'black']
+                        p "You win!"
+                        @turns = 12
+                    elsif @turns == 11
+                        p "You lose! Better luck next time!"
+                    end
                 end
+            else
+                puts "That's not an option, guess again!"
+                who_is_guessing = gets.chomp.downcase
             end
         end
     end
