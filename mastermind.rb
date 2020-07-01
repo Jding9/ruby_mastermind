@@ -100,11 +100,7 @@ module Actions
     def computer_guess
 
         temp_previous_answer = @player_selection.clone
-        p temp_previous_answer
-        p "was the previous guess"
         temp_last_result = @last_result.clone
-        p temp_last_result
-        p "was the previous result"
         new_selection = ["", "", "", ""] # empty new selection to be pushed into player selection afterwards
 
         black_peg_position = 0
@@ -114,8 +110,6 @@ module Actions
             end
             black_peg_position += 1
         end
-        p new_selection
-        p " are the known ones so far"
 
         white_peg_position = 0
         until white_peg_position == 4
@@ -135,8 +129,6 @@ module Actions
         end
 
         empty_peg_position = 0
-        p new_selection 
-        p "this is what the empty_peg_positions sees"
         until empty_peg_position == 4
             if new_selection[empty_peg_position] == ""
                 new_selection[empty_peg_position] = @colours[rand(6)]
